@@ -27,6 +27,8 @@
 static void controls_create(lv_obj_t * parent);
 static void visuals_create(lv_obj_t * parent);
 static void selectors_create(lv_obj_t * parent);
+static void newTab_create(lv_obj_t* parent);
+static void newButton_event_cb(lv_obj_t* button, lv_event_t e);
 static void slider_event_cb(lv_obj_t * slider, lv_event_t e);
 static void ta_event_cb(lv_obj_t * ta, lv_event_t e);
 static void kb_event_cb(lv_obj_t * ta, lv_event_t e);
@@ -50,6 +52,7 @@ static lv_obj_t * tv;
 static lv_obj_t * t1;
 static lv_obj_t * t2;
 static lv_obj_t * t3;
+static lv_obj_t * t4;
 static lv_obj_t * kb;
 
 static lv_style_t style_box;
@@ -85,7 +88,7 @@ void lv_demo_widgets(void)
     t1 = lv_tabview_add_tab(tv, "Controls");
     t2 = lv_tabview_add_tab(tv, "Visuals");
     t3 = lv_tabview_add_tab(tv, "Selectors");
-
+    t4 = lv_tabview_add_tab(tv, "NewTab");
 
     lv_style_init(&style_box);
     lv_style_set_value_align(&style_box, LV_STATE_DEFAULT, LV_ALIGN_OUT_TOP_LEFT);
@@ -95,6 +98,7 @@ void lv_demo_widgets(void)
     controls_create(t1);
     visuals_create(t2);
     selectors_create(t3);
+    newTab_create(t4);
 
 #if LV_DEMO_WIDGETS_SLIDESHOW
     lv_task_create(tab_changer_task_cb, 8000, LV_TASK_PRIO_LOW, NULL);
@@ -544,6 +548,60 @@ static void selectors_create(lv_obj_t * parent)
     }
 }
 
+static void newTab_create(lv_obj_t* parent)
+{
+    lv_page_set_scrl_layout(parent, LV_LAYOUT_PRETTY_TOP);
+
+    uint16_t btn_width = lv_obj_get_width(parent);
+    btn_width /= 8;
+
+    uint16_t btn_height = lv_obj_get_height(parent);
+    btn_height /= 10;
+
+    lv_obj_t* btn = lv_btn_create(parent, NULL);
+    lv_obj_set_pos(btn, (btn_width/2), (btn_height/2) );
+    lv_obj_set_height(btn, btn_height);
+    lv_obj_set_width(btn, btn_width);
+
+    lv_obj_t* label = lv_label_create(btn, NULL);
+    lv_label_set_text(label, "NewButton");
+
+    /* Assign an event */
+    lv_obj_set_event_cb(btn, newButton_event_cb);
+}
+
+static void newButton_event_cb(lv_obj_t* button, lv_event_t e)
+{
+    switch (e) {
+        case LV_EVENT_PRESSED:
+            printf("Pressed\n");
+            break;
+
+        case LV_EVENT_SHORT_CLICKED:
+            printf("Short clicked\n");
+            break;
+
+        case LV_EVENT_CLICKED:
+            printf("Clicked\n");
+            break;
+
+        case LV_EVENT_LONG_PRESSED:
+            printf("Long press\n");
+            break;
+
+        case LV_EVENT_LONG_PRESSED_REPEAT:
+            printf("Long press repeat\n");
+            break;
+
+        case LV_EVENT_RELEASED:
+            printf("Released\n");
+            break;
+
+        default:
+            break;
+    }
+}
+
 static void slider_event_cb(lv_obj_t * slider, lv_event_t e)
 {
     if(e == LV_EVENT_VALUE_CHANGED) {
@@ -560,6 +618,7 @@ static void slider_event_cb(lv_obj_t * slider, lv_event_t e)
     }
 
 }
+
 
 static void ta_event_cb(lv_obj_t * ta, lv_event_t e)
 {
