@@ -6,3 +6,5 @@
 *.obj
 *.pdb
 *.tlog
+
+/visual_studio_2017_sdl/x64/Debug/*
